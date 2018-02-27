@@ -5,6 +5,10 @@ from src.gameState import GameState
 
 from src.entities.agents.bot import Bot
 
+
+#Game class that structures gameflow
+#note for refactoring:
+    #inherit from this class and outsource the functionality into child classes
 class Game():
     def __init__(self):
         # init the base classes as attributes
@@ -13,6 +17,7 @@ class Game():
 
         self.enemies = []
         self.enemies.append(Bot())
+
 
 
     def start(self):
@@ -26,7 +31,12 @@ class Game():
 
 
     def logic(self):
-        pass
+        #move everyone
+        for e in self.enemies:
+
+            e.get_component('pos').x += e.get_component('mov').speed_x
+            e.get_component('pos').y += e.get_component('mov').speed_y
+
 
     def draw(self):
         #first empty the screen
@@ -41,7 +51,7 @@ class Game():
             self.painter.drawText(0,  0, "Frames: "  + str(glo.frame_counter))
             self.painter.drawText(0, 20, "Delta_t: " + str(glo.deltaT))
 
-        # Actually redraw the screen
+        # Redraw the screen now
         self.painter.flip()
 
 

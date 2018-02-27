@@ -17,3 +17,6 @@ class Bot(Agent_Base):
 
         #an image
         self.add_component(Image(glo.img_dino))
+
+        #ability to move around
+        self.add_component(Move(0.1,0.1))
