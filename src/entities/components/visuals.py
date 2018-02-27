@@ -4,8 +4,8 @@ import pygame
 
 #for now we will not do any animation only one image per entity to keep it simple
 class Image(Component_Base):
-    def __init__(self, imagePath):
+    def __init__(self, image):
 
         super().__init__('img')
 
-        self.image = load_image(imagePath)
+        self.image = image

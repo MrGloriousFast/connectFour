@@ -1,6 +1,7 @@
 #import components
 from src.entities.components.position import *
 from src.entities.components.visuals import Image
+import src.data.globals as glo
 
 #import the Agent base class
 from src.entities.agents.entity_base import Agent_Base
@@ -15,5 +16,4 @@ class Bot(Agent_Base):
         self.add_component(Position(500.0, 400.0))
 
         #an image
-        img = Image('../art/dinos/dino_2r.png')
-        self.add_component(img)
+        self.add_component(Image(glo.img_dino))

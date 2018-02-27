@@ -8,6 +8,10 @@ if not pygame.font: print("Warning, fonts disabled")
 if not pygame.mixer: print("Warning, sound disabled")
 
 
+
+
+
+
 def load_image(file, colorkey=False):
     #file = os.path.join('data', file)
     try:
@@ -16,9 +20,6 @@ def load_image(file, colorkey=False):
         if colorkey is True:
             image.set_colorkey(colorkey, pygame.RLEACCEL)
     except:
-
-
         print("Unable to load: ", file)
         image = None
-
     return image
