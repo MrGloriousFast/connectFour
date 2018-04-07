@@ -1,4 +1,4 @@
-import pygame, sys
+import pygame, sys, math, random
 import src.data.globals as glo
 from src.render.render import Renderer
 from src.gameState import GameState
@@ -16,9 +16,11 @@ class Game():
         self.state = GameState()
 
         self.enemies = []
-        self.enemies.append(Bot())
-
-
+        for _ in range(0,5):
+            x=random.uniform(0, 100)
+            y=random.uniform(0, 100)
+            print(x,y)
+            self.enemies.append(Bot(x,y))
 
     def start(self):
         self.__init__()
@@ -31,29 +33,50 @@ class Game():
 
 
     def logic(self):
-        #move everyone
-        for e in self.enemies:
+        collection = self.enemies
+        mx, my = pygame.mouse.get_pos()
+        self.sys_follow_mouse(collection, mx, my)
+        self.sys_move(collection)
 
-            e.get_component('pos').x += e.get_component('mov').speed_x
-            e.get_component('pos').y += e.get_component('mov').speed_y
 
+    def sys_follow_mouse(self, collection, aimx, aimy):
+        for e in collection:
+            px, py = e.comp('pos').get_pos()
+            e.comp('mov').accl_x  = -0.0000001 * (px - aimx)
+            e.comp('mov').accl_y  = -0.0000001 * (py - aimy)
+
+
+    def sys_move(self, collection):
+        # move everyone
+        for e in collection:
+            e.comp('mov').speed_x += e.comp('mov').accl_x
+            e.comp('mov').speed_y += e.comp('mov').accl_y
+
+            e.comp('pos').x += e.comp('mov').speed_x
+            e.comp('pos').y += e.comp('mov').speed_y
+
+    def sys_draw(self, collection):
+
+        # now draw new stuff
+        for i, e in enumerate(collection):
+            print(i)
+            x, y = e.components['pos'].get_pos()
+            self.painter.drawImage(e.components['img'].image, x, y)
 
     def draw(self):
-        #first empty the screen
+        # empty the screen for new drawings
         self.painter.clear()
 
-        #now draw new stuff
-        for e in self.enemies:
-            self.painter.drawImage(e.components['img'].image, e.components['pos'].x, e.components['pos'].y)
+        #draw new stuff
+        self.sys_draw(self.enemies)
 
         #draw some debug info on the screen
         if self.state.debug:
-            self.painter.drawText(0,  0, "Frames: "  + str(glo.frame_counter))
+            self.painter.drawText(0,  0, "Frames:  " + str(glo.frame_counter))
             self.painter.drawText(0, 20, "Delta_t: " + str(glo.deltaT))
 
         # Redraw the screen now
         self.painter.flip()
-
 
     def end_frame(self):
 

@@ -6,5 +6,5 @@
 class Component_Base():
     def __init__(self, name = 'base'):
         self.name = name #should be three letters unique description
-        self.id = 0
+        #self.id = 0
 

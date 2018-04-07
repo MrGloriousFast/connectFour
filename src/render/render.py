@@ -5,7 +5,8 @@ import src.data.globals as glo
 class Renderer:
 
     def __init__(self):
-        self.surface = pygame.display.set_mode((glo.window_x, glo.window_y))  # ,pygame.FULLSCREEN)
+
+        self.surface = pygame.display.set_mode((glo.window_x, glo.window_y))#,pygame.FULLSCREEN)
 
         pygame.display.set_caption(glo.caption)
 
@@ -24,8 +25,13 @@ class Renderer:
 
 
     def drawImage(self,image, xx, yy):
-        (xsize, ysize) = image.get_size()
-        self.surface.blit(image, (int(xx - xsize / 2), int(yy - ysize / 2)))
+
+        #check if in screen
+        if(xx<glo.window_x and xx >0.0):
+            if yy < glo.window_y and yy>0.0:
+                (xsize, ysize) = image.get_size()
+                print(xx,yy)
+                self.surface.blit(image, (int(xx - xsize / 2), int(yy - ysize / 2)))
 
     #draw text at a position
     def drawText(self, x, y, text, color=glo.WHITE):
