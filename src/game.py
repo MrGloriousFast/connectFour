@@ -1,7 +1,9 @@
 import pygame, sys, math, random
 import src.data.globals as glo
+from data.resources import Atlas_images
 from src.render.render import Renderer
 from src.gameState import GameState
+from src.data.loader import load_image
 
 from src.entities.agents.bot import Bot
 
@@ -12,14 +14,14 @@ from src.entities.agents.bot import Bot
 class Game():
     def __init__(self):
         # init the base classes as attributes
-        self.painter = Renderer()
+        self.painter = Renderer() #needs to be called before loading images! Or pygame will not know the video mode and crash
         self.state = GameState()
 
         self.enemies = []
         for _ in range(0,5):
-            x=random.uniform(0, 100)
-            y=random.uniform(0, 100)
-            print(x,y)
+            x=random.uniform(0, 100.0)
+            y=random.uniform(0, 100.0)
+            #print(x,y)
             self.enemies.append(Bot(x,y))
 
     def start(self):
@@ -59,7 +61,7 @@ class Game():
 
         # now draw new stuff
         for i, e in enumerate(collection):
-            print(i)
+            #print(i)
             x, y = e.components['pos'].get_pos()
             self.painter.drawImage(e.components['img'].image, x, y)
 

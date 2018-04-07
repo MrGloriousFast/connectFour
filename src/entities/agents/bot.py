@@ -1,4 +1,5 @@
 #import components
+from data.resources import Atlas_images
 from src.entities.components.position import *
 from src.entities.components.visuals import Image
 import src.data.globals as glo
@@ -17,7 +18,7 @@ class Bot(Agent_Base):
         self.add_component(p)
 
         #an image
-        self.add_component(Image(glo.img_dino))
+        self.add_component(Image(Atlas_images.getInstance().img_dino))
 
         #ability to move around
         self.add_component(Move())

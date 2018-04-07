@@ -5,9 +5,9 @@ import pygame, random
 class Position(Component_Base):
     def __init__(self,x=100.0,y=100.0):
         super().__init__('pos')
-
         self.x = x
         self.y = y
+
     def get_pos(self):
         return (self.x,self.y)
 

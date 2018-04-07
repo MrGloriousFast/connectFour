@@ -8,21 +8,16 @@ if not pygame.font: print("Warning, fonts disabled")
 if not pygame.mixer: print("Warning, sound disabled")
 
 def load_image(file):
-    image = pygame.image.load(file)
-    image.set_colorkey(image.get_at((0, 0)))
+    #colorkey
+    #this color will be invisible
+    transColor = pygame.Color(200, 0, 200)
 
-    transColor = pygame.Color(255, 0, 255)
-    image = pygame.image.load(file)
+    #load the image
+    #video mode has to be set before calling this line
+    #video is set in the render.py file, the main or the game class have to set it
+    image = pygame.image.load(file).convert()
+
+    #after loading we make the transcolor invisible
     image.set_colorkey(transColor)
 
-    '''
-    
-    try:
-        image = pygame.image.load(file)
-        image.set_colorkey(image.get_at((0, 0)))
-
-    except:
-        print("Unable to load: ", file)
-        image = None
-    '''
     return image
