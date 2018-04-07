@@ -30,8 +30,9 @@ class Renderer:
         if(xx<glo.window_x and xx >0.0):
             if yy < glo.window_y and yy>0.0:
                 (xsize, ysize) = image.get_size()
-                #print(xx,yy)
+                #print('in painter', xx,yy)
                 self.surface.blit(image, (int(xx - xsize / 2), int(yy - ysize / 2)))
+
 
     #draw text at a position
     def drawText(self, x, y, text, color=glo.WHITE):

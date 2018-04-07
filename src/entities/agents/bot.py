@@ -18,7 +18,9 @@ class Bot(Agent_Base):
         self.add_component(p)
 
         #an image
-        self.add_component(Image(Atlas_images.getInstance().img_dino))
+        i = Image(Atlas_images.getInstance().img_dino)
+        self.add_component(i)
 
         #ability to move around
-        self.add_component(Move())
+        m = Move()
+        self.add_component(m)

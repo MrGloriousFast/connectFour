@@ -18,11 +18,11 @@ class Game():
         self.state = GameState()
 
         self.enemies = []
-        for _ in range(0,5):
-            x=random.uniform(0, 100.0)
-            y=random.uniform(0, 100.0)
-            #print(x,y)
+        for _ in range(0,500):
+            x=random.uniform(0, glo.window_x)
+            y=random.uniform(0, glo.window_y)
             self.enemies.append(Bot(x,y))
+
 
     def start(self):
         self.__init__()
@@ -50,7 +50,7 @@ class Game():
 
     def sys_move(self, collection):
         # move everyone
-        for e in collection:
+        for i, e in enumerate(collection):
             e.comp('mov').speed_x += e.comp('mov').accl_x
             e.comp('mov').speed_y += e.comp('mov').accl_y
 
@@ -61,8 +61,9 @@ class Game():
 
         # now draw new stuff
         for i, e in enumerate(collection):
-            #print(i)
+
             x, y = e.components['pos'].get_pos()
+            #print('in sys',i,x,y)
             self.painter.drawImage(e.components['img'].image, x, y)
 
     def draw(self):
