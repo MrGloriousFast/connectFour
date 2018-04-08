@@ -42,10 +42,10 @@ class Game():
 
 
     def sys_follow_mouse(self, collection, aimx, aimy):
-        for e in collection:
+        for i, e in enumerate(collection):
             px, py = e.comp('pos').get_pos()
-            e.comp('mov').accl_x  = -0.0000001 * (px - aimx)
-            e.comp('mov').accl_y  = -0.0000001 * (py - aimy)
+            e.comp('mov').accl_x = -0.00001 * (px - aimx)
+            e.comp('mov').accl_y = -0.00001 * (py - aimy)
 
 
     def sys_move(self, collection):
@@ -63,7 +63,6 @@ class Game():
         for i, e in enumerate(collection):
 
             x, y = e.components['pos'].get_pos()
-            #print('in sys',i,x,y)
             self.painter.drawImage(e.components['img'].image, x, y)
 
     def draw(self):
