@@ -3,7 +3,7 @@ import src.data.globals as glo
 from data.resources import Atlas_images
 from src.render.render import Renderer
 from src.gameState import GameState
-from src.data.loader import load_image
+from src.world.map import Map
 
 from src.entities.agents.bot import Bot
 
@@ -17,12 +17,15 @@ class Game():
         self.painter = Renderer() #needs to be called before loading images! Or pygame will not know the video mode and crash
         self.state = GameState()
 
+        #create enemies
         self.enemies = []
-        for _ in range(0,500):
+        for _ in range(0,5):
             x=random.uniform(0, glo.window_x)
             y=random.uniform(0, glo.window_y)
             self.enemies.append(Bot(x,y))
 
+        #create map
+        self.world = Map()
 
     def start(self):
         self.__init__()
@@ -70,7 +73,8 @@ class Game():
         self.painter.clear()
 
         #draw new stuff
-        self.sys_draw(self.enemies)
+        self.painter.drawWorld(self.world)
+        self.sys_draw(self.enemies)#entities
 
         #draw some debug info on the screen
         if self.state.debug:

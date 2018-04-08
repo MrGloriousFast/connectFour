@@ -1,6 +1,7 @@
 import pygame
 import datetime
 import src.data.globals as glo
+import numpy as np
 
 class Renderer:
 
@@ -33,6 +34,21 @@ class Renderer:
                 #print('in painter', xx,yy)
                 self.surface.blit(image, (int(xx - xsize / 2), int(yy - ysize / 2)))
 
+    def drawWorld(self, map):
+        rekt = pygame.Rect(0,0,map.scale,map.scale)
+        for index, x in np.ndenumerate(map.grid):
+
+            if map.get(index[0],index[1])==1:
+
+                if map.scale >1:
+                    rekt.x =  index[0]*map.scale #move(*index)
+                    rekt.y = index[1]*map.scale
+
+                    pygame.draw.rect(self.surface, glo.WHITE, rekt)
+
+                else:
+                    #pygame.draw.gfxdraw.pixel(self.surface, index[0], index[1], glo.WHITE)
+                    self.surface.set_at(index, glo.WHITE)
 
     #draw text at a position
     def drawText(self, x, y, text, color=glo.WHITE):
