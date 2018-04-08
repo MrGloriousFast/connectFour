@@ -1,12 +1,11 @@
-#import components
+# import components
 from data.resources import Atlas_images
 from src.entities.components.position import *
 from src.entities.components.visuals import Image
-import src.data.globals as glo
 
-#import the Agent base class
+# import the Agent base class
 from src.entities.agents.entity_base import Agent_Base
-import pygame, random
+
 
 class Bot(Agent_Base):
     def __init__(self, px, py):
