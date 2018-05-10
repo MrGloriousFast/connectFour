@@ -1,10 +1,10 @@
 # import components
 from data.resources import Atlas_images
-from src.entities.components.position import *
-from src.entities.components.visuals import Image
+from entities.components.position import *
+from entities.components.visuals import Image
 
 # import the Agent base class
-from src.entities.agents.entity_base import Agent_Base
+from entities.agents.entity_base import Agent_Base
 
 
 class Bot(Agent_Base):

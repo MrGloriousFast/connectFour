@@ -2,8 +2,8 @@ import pygame
 
 
 FPS = 100
-window_y = 720
-window_x = 1280
+window_y = 540#720
+window_x = 960#1280
 caption = 'Neurotic'
 
 font = pygame.font.Font('freesansbold.ttf', 16)

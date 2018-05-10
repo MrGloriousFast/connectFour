@@ -1,6 +1,6 @@
 
 
-from src.data.loader import load_image
+from data.loader import load_image
 
 '''
 

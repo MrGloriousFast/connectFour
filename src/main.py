@@ -7,8 +7,9 @@
 import pygame,sys
 pygame.init()
 
-from src.game import Game
+from game import Game
+from connectFour import ConnectFour
 
 #our main is very simple and uses the game class to run a game
-game = Game()
+game = ConnectFour()
 game.start()

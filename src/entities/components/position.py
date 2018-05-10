@@ -1,4 +1,4 @@
-from src.entities.components.component_base import Component_Base
+from entities.components.component_base import Component_Base
 import pygame, random
 
 #where in the map is the entity

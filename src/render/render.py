@@ -1,6 +1,6 @@
 import pygame
 import datetime
-import src.data.globals as glo
+import data.globals as glo
 import numpy as np
 
 class Renderer:
@@ -41,7 +41,7 @@ class Renderer:
             if map.get(index[0],index[1])==1:
 
                 if map.scale >1:
-                    rekt.x =  index[0]*map.scale #move(*index)
+                    rekt.x = index[0]*map.scale #move(*index)
                     rekt.y = index[1]*map.scale
 
                     pygame.draw.rect(self.surface, glo.WHITE, rekt)
@@ -49,6 +49,27 @@ class Renderer:
                 else:
                     #pygame.draw.gfxdraw.pixel(self.surface, index[0], index[1], glo.WHITE)
                     self.surface.set_at(index, glo.WHITE)
+
+    def draw_connect_four(self, gamefield):
+
+        #height
+        circle_height = glo.window_y / gamefield.colomns
+
+        #width
+        circle_width = glo.window_x / gamefield.rows
+
+        glo.BGCOLOR = glo.BLACK
+
+        for x in range(0, gamefield.rows):
+            for y in range(0, gamefield.colomns):
+                rekt = pygame.Rect(x*circle_width,y*circle_height,circle_width,circle_height)
+                color = glo.DARKGRAY #empty places
+                if gamefield.field[x,y] == 0:
+                    color = glo.DARKRED
+                elif gamefield.field[x,y] == 1:
+                    color = glo.DARKBLUE
+
+                pygame.draw.ellipse(self.surface, color, rekt)
 
     #draw text at a position
     def drawText(self, x, y, text, color=glo.WHITE):

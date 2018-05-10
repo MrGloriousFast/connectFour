@@ -1,35 +1,35 @@
 import pygame, sys, math, random
-import src.data.globals as glo
-from data.resources import Atlas_images
-from src.render.render import Renderer
-from src.gameState import GameState
-from src.world.map import Map
+import data.globals as glo
+from render.render import Renderer
+from world.map import Map
 
-from src.entities.agents.bot import Bot
+from entities.agents.bot import Bot
 
 
-#Game class that structures gameflow
-#note for refactoring:
-    #inherit from this class and outsource the functionality into child classes
+# Game class that structures gameflow
+# note for refactoring:
+    # inherit from this class and outsource the functionality into child classes
 class Game():
     def __init__(self):
         # init the base classes as attributes
-        self.painter = Renderer() #needs to be called before loading images! Or pygame will not know the video mode and crash
-        self.state = GameState()
+        self.painter = Renderer() # needs to be called before loading images! Or pygame will not know the video mode and crash
 
-        #create enemies
+        # create enemies
         self.enemies = []
-        for _ in range(0,5):
-            x=random.uniform(0, glo.window_x)
-            y=random.uniform(0, glo.window_y)
-            self.enemies.append(Bot(x,y))
+        for _ in range(0, 5):
+            x = random.uniform(0, glo.window_x)
+            y = random.uniform(0, glo.window_y)
+            self.enemies.append(Bot(x, y))
 
-        #create map
+        # create map
         self.world = Map()
 
     def start(self):
+        print('starting game')
+
         self.__init__()
         self.loop()
+
         print('finished')
 
 
@@ -72,11 +72,11 @@ class Game():
         # empty the screen for new drawings
         self.painter.clear()
 
-        #draw new stuff
+        # draw new stuff
         self.painter.drawWorld(self.world)
         self.sys_draw(self.enemies)#entities
 
-        #draw some debug info on the screen
+        # draw some debug info on the screen
         if self.state.debug:
             self.painter.drawText(0,  0, "Frames:  " + str(glo.frame_counter))
             self.painter.drawText(0, 20, "Delta_t: " + str(glo.deltaT))
@@ -86,15 +86,15 @@ class Game():
 
     def end_frame(self):
 
-        #increment the frame counter
+        # increment the frame counter
         glo.frame_counter += 1
 
-        #for now we jsut wait a little bit
-        #later on we should wait depending on FPS settings
+        # for now we jsut wait a little bit
+        # later on we should wait depending on FPS settings
+        # for a turn based game we might even just draw once and wait for user input
         pygame.time.wait(1)
 
-
-    #basically user input via mouse or keyboard
+    # basically user input via mouse or keyboard
     def event_loop(self):
         for event in pygame.event.get():  # event handling loop
             if event.type == pygame.QUIT or (event.type == pygame.KEYUP and event.key == pygame.K_ESCAPE):
@@ -103,20 +103,20 @@ class Game():
 
     def loop(self):
         # main gameloop
-        #to make the game engine easy we will use one frame for logic AND for rendering
+        # to make the game engine easy we will use one frame for logic AND for rendering
         while True:
-            #begin the frame
+            # begin the frame
             self.begin_frame()
 
-            #get user input
+            # get user input
             self.event_loop()
 
-            #calculate everything you need
+            # calculate everything you need
             self.logic()
 
-            #draw everything
+            # draw everything
             self.draw()
 
-            #end the frame
+            # end the frame
             self.end_frame()
 
