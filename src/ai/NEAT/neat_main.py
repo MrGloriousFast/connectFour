@@ -10,12 +10,17 @@ This is the only class we will have to deal with from the outside
 
 
 class NEATBrain(BotBase):
-    def __init__(self, in_dimension, out_dimension, genome=None):
+    def __init__(self, in_dimension= None, out_dimension= None, genome=None):
         super().__init__()
         self.name = 'NEAT Brain'
 
         self.noise = 0.0
         self.inverted_team_color = False
+
+        if in_dimension is None:
+            in_dimension = 42*2+1
+        if out_dimension is None:
+            out_dimension = 7
 
         if genome is None:
             self.genome = Genome(in_dimension, out_dimension)
@@ -26,35 +31,27 @@ class NEATBrain(BotBase):
 
     def choose_action(self, field, action_list, player_color):
 
-        #gamefield is 2d array and we have to make it into a list
+        # gamefield is 2d array and we have to make it into a list
+        # brain wants a list as input
         in_list = []
 
-        # invert player colors
-        # so the bot doesnt optimize to play only one color
-        #for the bot it looks like he always plays in his own team
-        invert = False
-        if player_color == 1:
-            invert = True
+        enemy_color = 0
+        if player_color == 0:
+            enemy_color = 1
 
+        # apply own stone inputs
         for ii in np.nditer(field):
-            if ii == -1:
-                in_list.append(0.1)
-            if invert:
-                if ii == 1:
-                    in_list.append(0.5)
-                if ii == 0:
-                    in_list.append(0.9)
+            if ii == player_color:
+                in_list.append(1.0)
             else:
-                if ii == 0:
-                    in_list.append(0.5)
-                if ii == 1:
-                    in_list.append(0.9)
-        if invert:
-            if player_color == 0:
-                player_color == 1
+                in_list.append(0.0)
+
+        # apply enemy stone inputs
+        for ii in np.nditer(field):
+            if ii == enemy_color:
+                in_list.append(1.0)
             else:
-                player_color == 0
-        in_list.append(player_color)
+                in_list.append(0.0)
 
         #give him a warning that there is one illegal move possible
         if len(action_list) < 7:
@@ -286,7 +283,7 @@ class Genome:
             self.enable_flip(gen)
 
         # hard limit for connections/nodes
-        max_genes = 100000
+        max_genes = 1000000
         if len(self.gen_dict.keys()) > max_genes:
             #print(' genome is too big! reached ' + str(len(self.gen_dict.keys())))
             #print('removing random genes !')

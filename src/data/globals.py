@@ -1,9 +1,17 @@
 import pygame
 
 
-FPS = 100
-window_y = 540#720
-window_x = 960#1280
+FPS = 30
+
+# all in 16:9
+resolution_360 = (640, 360)
+resolution_480 = (854, 480)
+resolution_720 = (1280, 720)
+resolution_1080 = (1920, 1080)
+
+window_x ,window_y = resolution_720
+
+
 caption = 'Neurotic'
 
 font = pygame.font.Font('freesansbold.ttf', 16)

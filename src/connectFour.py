@@ -12,7 +12,7 @@ from ai.bot_base import BotBase
 from ai.NeuroNet import Brain
 from ai.mutant import Mutant
 from ai.NEAT.neat_main import NEATBrain
-
+from ai.pytorch_playground import TorchBot
 
 class ConnectFour(Game):
     def __init__(self):
@@ -22,7 +22,7 @@ class ConnectFour(Game):
         # needs to be called before loading images! Or pygame will not know the video mode and crash
         self.painter = Renderer()
 
-        self.slomo = True
+        self.slomo = False
         self.sleep = 100
 
         self.vertical_win = True
@@ -34,7 +34,7 @@ class ConnectFour(Game):
 
         # champion bots
         for i in range(self.champion_size):
-            b = NEATBrain(44, 7)
+            b = TorchBot()
             for _ in range(0):
                 b.mutate()
             self.champions.append(b)
@@ -49,14 +49,11 @@ class ConnectFour(Game):
 
         # create player list
         self.player_list = []
+        self.player_list.append(self.champions[0])
+        self.player_list.append(self.champions[1])
         self.player_color = ['RED', 'BLUE']
         self.player_points = [0, 0]
 
-        b = NEATBrain(44, 7)
-        self.player_list.append(b)
-        #bot two
-        b = NEATBrain(44, 7)
-        self.player_list.append(b)
         self.player_pointer = 0
         self.beginning_player = 0
 
