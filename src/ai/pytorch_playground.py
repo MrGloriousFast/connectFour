@@ -1,7 +1,7 @@
 import random
 
 import copy
-import torch
+import torch as pt
 import torch.nn as nn
 import torch.nn.functional as F
 
@@ -17,14 +17,20 @@ class TorchBot(BotBase, nn.Module):
         super(TorchBot, self).__init__()
         self.name = "torchBot"
 
+        # convolution layer so we can detect patterns
+        self.conv1 = nn.Conv2d(in_channels=3, out_channels=3, kernel_size=2, stride=1, groups=1)
+        self.conv2 = nn.Conv2d(in_channels=3, out_channels=1, kernel_size=2, stride=1, groups=1)
+
         # gamefield input -> hiddenlayer
-        self.fc1 = nn.Linear(6*7*2, 20)
+        self.fc1 = nn.Linear(5*4, 10)
 
         # hidden layer -> output
-        self.fc2 = nn.Linear(20, 7)
+        self.fc2 = nn.Linear(10, 7)
 
     def choose_action(self, gamefield, action_list, player_color):
-        sensors = self.prepare_input(gamefield, player_color)
+
+        sensors = self.one_hot(gamefield, player_color)
+        # sensors = self.prepare_input(gamefield, player_color)
 
         actors = self.forward(sensors)
         actors = list(actors)
@@ -32,47 +38,65 @@ class TorchBot(BotBase, nn.Module):
 
         return choice
 
-    def forward(self, i):
-        x = torch.Tensor(i)
+    def forward(self, x):
+
+        # due to batch size we have do this
+        x = pt.unsqueeze(x, 0)
+        #x = pt.unsqueeze(x, 0)
+
+
+        x = F.relu(self.conv1(x))
+
+
+        x = F.relu(self.conv2(x))
+
+
+        # flatten the tensor so we can put our fc onto it
+        x = x.view(-1)
+
         x = self.fc1(x)
+
+
         x = self.fc2(x)
+
 
         x = F.softmax(x, dim=0)
 
+
         return x
 
-    def prepare_input(self, field, player_color):
+    def one_hot(self, input_numpy_2d_array, player_color):
+        # the values we will encounter in the input
+        # for each one of them we will have to create a one hot encoding
+        classes = [-1.0, 0.0, 1.0]
 
-        # gamefield is 2d array and we have to make it into a list
-        # brain wants a list as input
-        in_list = []
+        if player_color == 1:
+            classes = [-1.0, 1.0, 0.0]
 
-        enemy_color = 0
-        if player_color == 0:
-            enemy_color = 1
+        # get the input dimensions
+        dim_x = input_numpy_2d_array.shape[0]
+        dim_y = input_numpy_2d_array.shape[1]
 
-        # apply own stone inputs
-        for ii in np.nditer(field):
-            if ii == player_color:
-                in_list.append(1.0)
-            else:
-                in_list.append(0.0)
+        # create a tensor big enough to fit all data
+        hot_tensor = pt.zeros([len(classes), dim_x, dim_y], dtype=pt.float32)
 
-        # apply enemy stone inputs
-        for ii in np.nditer(field):
-            if ii == enemy_color:
-                in_list.append(1.0)
-            else:
-                in_list.append(0.0)
+        # fill the tensor with our values
+        for x in range(0, dim_x):
+            for y in range(0, dim_y):
+                value = input_numpy_2d_array[x][y]
+                for c in range(0, len(classes)):
+                    if value == classes[c]:
+                        hot_tensor[c][x][y] = 1.0
 
-        return in_list
+        return hot_tensor
 
     def mutate(self):
 
-        mutation_step = 1.0
+        mutation_step = 10.0
 
         for f in self.parameters():
-            if random.randint(0,100) < 5:
+            # x percent chance to change a weight
+            if random.randint(0, 100) < 1:
                 f.data.sub_(random.uniform(-mutation_step, mutation_step))
 
     def get_clone(self):

@@ -3,3 +3,4 @@ venv/
 art/*
 __pycache__/*
 *.cpython-36.pyc
+*.zip

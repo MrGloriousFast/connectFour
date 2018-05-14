@@ -23,9 +23,9 @@ class ConnectFour(Game):
         self.painter = Renderer()
 
         self.slomo = False
-        self.sleep = 100
+        self.sleep = 50
 
-        self.vertical_win = True
+        self.vertical_win = False
 
         # only if a bot wins against all champions can he enter the champions, replacing one randomly
         self.champions = []
@@ -86,10 +86,14 @@ class ConnectFour(Game):
 
         # create mutant
         #mutant = random.choice(self.champions).get_clone()
-        r = random.randint(self.champion_size/2, self.champion_size-1)
+        r = random.randint(0, self.champion_size-1)
         mutant = self.champions[r].get_clone()
         for _ in range(random.randint(1, 15)):
             mutant.mutate()
+
+        # x percent chance to create a completely new bot
+        if random.randint(0, 100) < 50:
+            mutant = TorchBot()
 
         # fight against all champs
         self.champion_win_counter = 0
@@ -113,28 +117,11 @@ class ConnectFour(Game):
                     if temp == rounds:
                         self.champion_win_counter += 1
 
-        #fight the random bot too
-        random_bot = BotBase()
-        # two rounds so both begin once
-        for _ in range(rounds):
-
-            # change who begins
-            self.beginning_player += 1
-            self.beginning_player %= 2
-            self.player_pointer = self.beginning_player
-
-            # remember if the mutant won
-            if self.play_against(mutant, random_bot) == 0:
-
-                #print('random bot beaten')
-                self.champion_win_counter += 1
-
-
         # if the mutant won against all other he joins them
         # replacing one random champ
 
-        #if self.champion_win_counter > self.champion_size-2:
-        self.champions[self.champion_win_counter-2] = mutant
+        if self.champion_win_counter > 3:
+            self.champions[random.randint(0, self.champion_win_counter-1)] = mutant
 
         #print('wins ', self.champion_win_counter, '/', self.champion_size)
         #print('new champion ', self.champion_win_counter-1)
@@ -331,10 +318,8 @@ class ConnectFour(Game):
         # for a turn based game we might even just draw once and wait for user input
 
 
-        if self.slomo:
-            pygame.time.wait(self.sleep)
-        else:
-            pass
+
+        pygame.time.wait(self.sleep)
 
     # basically user input via mouse or keyboard
     def event_loop(self):
